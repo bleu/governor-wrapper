@@ -2,12 +2,12 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import {GovernorWrapper} from "../src/GovernorWrapper.sol";
+import {ERC20VotesGovernorWrapper} from "../src/ERC20VotesGovernorWrapper.sol";
 import {ERC20Votes} from "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract GovernorWrapperTest is Test {
-    GovernorWrapper public wrapper;
+    ERC20VotesGovernorWrapper public wrapper;
     ERC20Votes public token;
     address public delegatee;
 
@@ -15,14 +15,14 @@ contract GovernorWrapperTest is Test {
     address constant ENS_WHALE = 0xFe89cc7aBB2C4183683ab71653C4cdc9B02D44b7;
     address constant USER = address(0xbeef);
 
-    uint256 constant AMOUNT = 1000 * 10**18;
+    uint256 constant AMOUNT = 1000 * 10 ** 18;
 
     function setUp() public {
         vm.createSelectFork(vm.envString("ETH_RPC_URL"));
         token = ERC20Votes(ENS_TOKEN);
         delegatee = address(0xdead);
 
-        wrapper = new GovernorWrapper(
+        wrapper = new ERC20VotesGovernorWrapper(
             IERC20(address(token)),
             "Voting ENS Wrapper",
             "vENS",

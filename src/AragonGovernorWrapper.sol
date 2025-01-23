@@ -6,7 +6,7 @@ import "./interfaces/IAragonVoting.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 
-contract AragonDelegateVault is ERC4626 {
+contract AragonGovernorWrapper is ERC4626 {
     constructor(
         IERC20 asset_,
         string memory name_,

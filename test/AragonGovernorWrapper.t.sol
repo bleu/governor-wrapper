@@ -2,11 +2,11 @@
 pragma solidity ^0.8.20;
 
 import {Test} from "forge-std/Test.sol";
-import {AragonDelegateVault, IAragonVoting} from "../src/AragonDelegateVault.sol";
+import {AragonGovernorWrapper, IAragonVoting} from "../src/AragonGovernorWrapper.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 contract AragonDelegateVaultTest is Test {
-    AragonDelegateVault public vault;
+    AragonGovernorWrapper public wrapper;
     IERC20 public token;
     address public delegatee;
 
@@ -24,7 +24,7 @@ contract AragonDelegateVaultTest is Test {
         token = IERC20(LDO_TOKEN);
         delegatee = address(0xdead);
 
-        vault = new AragonDelegateVault(
+        wrapper = new AragonGovernorWrapper(
             IERC20(address(token)),
             "Voting ENS Wrapper",
             "vENS",
@@ -37,37 +37,37 @@ contract AragonDelegateVaultTest is Test {
     }
 
     function test_InitialDelegation() public {
-        assertEq(ARAGON_VOTING.getDelegate(address(vault)), delegatee);
+        assertEq(ARAGON_VOTING.getDelegate(address(wrapper)), delegatee);
     }
 
     function testFuzz_OneToOneConversion(uint256 amount) public {
         vm.assume(amount < type(uint256).max);
-        assertEq(vault.convertToShares(amount), amount);
-        assertEq(vault.convertToAssets(amount), amount);
+        assertEq(wrapper.convertToShares(amount), amount);
+        assertEq(wrapper.convertToAssets(amount), amount);
     }
 
     function test_Deposit() public {
         vm.startPrank(USER);
-        token.approve(address(vault), AMOUNT);
-        vault.deposit(AMOUNT, USER);
+        token.approve(address(wrapper), AMOUNT);
+        wrapper.deposit(AMOUNT, USER);
         vm.stopPrank();
 
-        assertEq(vault.balanceOf(USER), AMOUNT);
-        assertEq(token.balanceOf(address(vault)), AMOUNT);
-        assertEq(ARAGON_VOTING.getDelegate(address(vault)), delegatee);
+        assertEq(wrapper.balanceOf(USER), AMOUNT);
+        assertEq(token.balanceOf(address(wrapper)), AMOUNT);
+        assertEq(ARAGON_VOTING.getDelegate(address(wrapper)), delegatee);
     }
 
     function test_VotingPower() public {
         vm.startPrank(USER);
-        token.approve(address(vault), AMOUNT);
-        vault.deposit(AMOUNT, USER);
+        token.approve(address(wrapper), AMOUNT);
+        wrapper.deposit(AMOUNT, USER);
         vm.stopPrank();
 
         address[] memory addresses = new address[](1);
 
-        addresses[0] = address(vault);
+        addresses[0] = address(wrapper);
 
         assertEq(ARAGON_VOTING.getVotingPowerMultiple(addresses)[0], AMOUNT);
-        assertEq(ARAGON_VOTING.getDelegate(address(vault)), delegatee);
+        assertEq(ARAGON_VOTING.getDelegate(address(wrapper)), delegatee);
     }
 }

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "./GovernorWrapper.sol";
+import "./ERC20VotesGovernorWrapper.sol";
 
 contract GovernorWrapperFactory {
     event WrapperCreated(address indexed token, address indexed wrapper);
@@ -11,8 +11,8 @@ contract GovernorWrapperFactory {
         string memory name_,
         string memory symbol_,
         address delegatee
-    ) external returns (GovernorWrapper wrapper) {
-        wrapper = new GovernorWrapper(
+    ) external returns (ERC20VotesGovernorWrapper wrapper) {
+        wrapper = new ERC20VotesGovernorWrapper(
             asset_,
             name_,
             symbol_,
