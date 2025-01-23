@@ -49,4 +49,19 @@ interface IAragonVoting {
         uint256 _voteId,
         address _voter
     ) external view returns (bool);
+
+    /**
+     * @notice Return the delegate address of the `_voter`
+     * @param _voter Address of the voter
+     */
+    function getDelegate(address _voter) external view returns (address);
+
+    /**
+     * @notice Return the cumulative voting power of the `_voters` at the current block
+     * @param _voters List of voters
+     * @return balances Array of governance token balances
+     */
+    function getVotingPowerMultiple(
+        address[] memory _voters
+    ) external view returns (uint256[] memory balances);
 }
