@@ -23,7 +23,7 @@ contract WeightedPoolContractsDeployer is BaseContractsDeployer {
 
     constructor() {
         // if this external artifact path exists, it means we are running outside of this repo
-        if (vm.exists("artifacts/@balancer-labs/v3-pool-weighted/")) {
+        if (reusingArtifacts && vm.exists("artifacts/@balancer-labs/v3-pool-weighted/")) {
             artifactsRootDir = "artifacts/@balancer-labs/v3-pool-weighted/";
         }
     }
